@@ -6,12 +6,6 @@
 /**
  * Exclusive-or gate:
  * out = not (a == b)
- * 
- * a b | Xor(a,b)
- * 0 0 | 0
- * 0 1 | 1
- * 1 0 | 1
- * 1 1 | 0
  */
 
 CHIP Xor {
@@ -19,11 +13,23 @@ CHIP Xor {
     OUT out;
 
     PARTS:
-    Not(in=b, out=w1);
-    Not(in=a, out=w2);
+		Nand(a=b, b=true, out=w9);
+		Nand(a=a, b=w9, out=w5);
 
-    And(a=a, b=w1, out=w3);
-    And(a=w2, b=b, out=w4);
+    Nand(a=b, b=true, out=w10);
+		Nand(a=a, b=w10, out=w6);
 
-    Or(a=w3, b=w4, out=out);
+		Nand(a=w6, b=w5, out=w3);
+		Nand(a=w3, b=w3, out=w1);
+
+    Nand(a=a, b=true, out=w11);
+		Nand(a=w11, b=b, out=w7);
+
+    Nand(a=a, b=true, out=w12);
+		Nand(a=w12, b=b, out=w8);
+
+		Nand(a=w7, b=w8, out=w4);
+		Nand(a=w4, b=w4, out=w2);
+
+		Nand(a=w1, b=w2, out=out);
 }
